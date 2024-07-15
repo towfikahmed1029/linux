@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .chat-container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        .chat-sidebar {
+            width: 20%;
+            padding: 10px;
+            border-right: 1px solid #ccc;
+        }
+        
+        .chat-box {
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-history {
+            flex-grow: 1;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .chat-message {
+            padding: 5px 10px;
+            margin: 5px 0;
+            width: 100%;
+        }
+        
+        .user-message {
+            text-align: right;
+            background-color: #dcf8c6;
+        }
+        
+        .ai-message {
+            text-align: left;
+            background-color: #f1f0f0;
+        }
+        
+        .welcome-message {
+            text-align: center;
+            background-color: #ffffff;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat-container">
+        <div class="chat-sidebar">
+            <h2>Table Names
+                <form action="/log" method="GET">
+                    <button type="submit" style="margin-top: 10px; background-color: #00f576; color: #fff; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px;">History</button>
+                </form>
+            </h2>
+            <div>
+                {% for topic in topics %}
+                <input type="checkbox" id="topic{{ loop.index }}" name="topic" value="{{ topic }}">
+                <label for="topic{{ loop.index }}">{{ topic }}</label><br> {% endfor %}
+
+                <form action="/logout" method="GET">
+                    <button type="submit" style="margin-top: 10px; background-color: #dc3545; color: #fff; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px;">Logout</button>
+                </form>
+
+            </div>
+        </div>
+
+        <div class="chat-box">
+            <div id="chat-history" class="chat-history">
+                <div class="chat-message welcome-message">Welcome</div>
+                <div class="chat-message welcome-message">Hello! How can I assist you today?</div>
+            </div>
+            <form id="chat-form">
+                <input type="text" id="message" name="message" placeholder="Type a message..." autocomplete="off" required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function scrollToBottom() {
+            $('#chat-history').scrollTop($('#chat-history')[0].scrollHeight);
+        }
+
+        $(document).ready(function() {
+            $('#chat-form').on('submit', function(e) {
+                e.preventDefault();
+
+                let message = $('#message').val();
+                let topics = $('input[name="topic"]:checked').map(function() {
+                    return this.value;
+                }).get();
+
+                // Append the user's message immediately
+                $('#chat-history').append('<div class="chat-message user-message">' + message + '</div>');
+                $('#message').val('');
+
+                // Scroll to the bottom of the chat history
+                scrollToBottom();
+
+                $.ajax({
+                    url: '/send_message',
+                    method: 'POST',
+                    data: {
+                        message: message,
+                        'topic[]': topics
+                    },
+                    success: function(response) {
+                        $('#chat-history').append('<div class="chat-message ai-message">' + response.reply + '</div>');
+
+                        // Scroll to the bottom of the chat history
+                        scrollToBottom();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
