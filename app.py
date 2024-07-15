@@ -50,7 +50,7 @@ sql_toolkit = SQLDatabaseToolkit(db=db, llm=llm)
 agent_executor = create_sql_agent(
     llm=llm,
     toolkit=sql_toolkit,
-    # verbose=True,
+    verbose=True,
     handle_parsing_errors=True,
 )
     # return agent_executor
@@ -101,17 +101,6 @@ def index():
         return render_template('login.html', error=None)
     return render_template('index.html', topics=TOPICS)
 
-@app.route('/log', methods=['GET', 'POST'])
-def log():
-    if not session.get('logged_in'):
-        return render_template('login.html', error=None)
-    try:
-        with open('log.txt', 'r', encoding='utf-8') as file:
-            log_content = file.read()
-    except FileNotFoundError:
-        log_content = "Log file not found."
-    entries = log_content.split("\n\n")
-    return render_template('log.html', entries=entries)
 
 @app.route('/logout', methods=['GET'])
 def logout():
@@ -126,7 +115,11 @@ def log():
         with open('log.txt', 'r', encoding='utf-8') as file:
             log_content = file.read()
     except FileNotFoundError:
-        log_content = "Log file not found."
+        with open('log.txt','a') as ff:
+            ff.write("No Logs Data.\n")
+        with open('log.txt', 'r', encoding='utf-8') as file:
+            log_content = file.read()
+#        log_content = "Log file not found."
     entries = log_content.split("\n\n")
     return render_template('log.html', entries=entries)
 
