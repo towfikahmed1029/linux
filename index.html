@@ -4,133 +4,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat App</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <style>
-        .chat-container {
-            display: flex;
-            height: 100vh;
-        }
-        
-        .chat-sidebar {
-            width: 20%;
-            padding: 10px;
-            border-right: 1px solid #ccc;
-        }
-        
-        .chat-box {
-            width: 80%;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .chat-history {
-            flex-grow: 1;
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .chat-message {
-            padding: 5px 10px;
-            margin: 5px 0;
-            width: 100%;
-        }
-        
-        .user-message {
-            text-align: right;
-            background-color: #dcf8c6;
-        }
-        
-        .ai-message {
-            text-align: left;
-            background-color: #f1f0f0;
-        }
-        
-        .welcome-message {
-            text-align: center;
-            background-color: #ffffff;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-    </style>
+    <title>Calculation Form</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 
 <body>
-    <div class="chat-container">
-        <div class="chat-sidebar">
-            <h2>Table Names
-                <form action="/log" method="GET">
-                    <button type="submit" style="margin-top: 10px; background-color: #00f576; color: #fff; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px;">History</button>
-                </form>
-            </h2>
-            <div>
-                {% for topic in topics %}
-                <input type="checkbox" id="topic{{ loop.index }}" name="topic" value="{{ topic }}">
-                <label for="topic{{ loop.index }}">{{ topic }}</label><br> {% endfor %}
+    <section class="section-bg" style="background-image: url(https://i.ibb.co/9p3Cnk9/slider-2.jpg);" data-scroll-index="7">
+        <div class="overlay pt-100 pb-100 ">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 d-flex align-items-center">
+                        <div class="contact-info">
+                            <h2 class="contact-title">Have Any Questions?</h2>
+                            <p>To get the cash offer they must enter their email, Phone, and Name, and it will be emailed to them (It can also present the offer once this info is submitted) - An automated email with the cash offer will be sent - A computerized
+                                SMS with the cash offer will be sent</p>
+                            <p>To get potentially a higher more accurate offer, please reply to our text message or email with any photos you have of the current condition of the property</p>
 
-                <form action="/logout" method="GET">
-                    <button type="submit" style="margin-top: 10px; background-color: #dc3545; color: #fff; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px;">Logout</button>
-                </form>
-
+                            <ul class="contact-info">
+                                <li>
+                                    <div class="info-left">
+                                        <i class="fas fa-mobile-alt"></i>
+                                    </div>
+                                    <div class="info-right">
+                                        <h4>+11223344550</h4>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="info-left">
+                                        <i class="fas fa-at"></i>
+                                    </div>
+                                    <div class="info-right">
+                                        <h4>info@example.com</h4>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="info-left">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div class="info-right">
+                                        <h4>1243 Stree , Dhaka</h4>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 d-flex align-items-center">
+                        <div class="contact-form">
+                            <!--Contact Form-->
+                            {% if error_message %}
+                            <div class="alert alert-danger mt-3" role="alert">
+                                {{ error_message }}
+                            </div>
+                            {% endif %}
+                            <form id='contact-form' action="{{ url_for('submit') }}" method="POST">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="text" name="name" class="form-control" id="name" placeholder="Enter Your Name *" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="text" name="phone" class="form-control" id="phone" placeholder="Enter Your Phone Number *" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="email" name="email" class="form-control" id="email" placeholder="Enter Your Email *" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="text" name="address" class="form-control" id="address" placeholder="Enter Your address *" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="text" name="Average_Construction" class="form-control" id="Average_Construction" placeholder="Average Construction Cost (USD) in State *" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="text" name="Sqft" class="form-control" id="Sqft" placeholder="Sqft *" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="number" name="Level_of_Damage" class="form-control" id="Level_of_Damage" placeholder="Level of Damage Affected by Fire/Smoke/Water (1-100%) *" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <!--contact button-->
+                                        <button class="btn-big btn btn-bg">
+                                                    Send Us <i class="fas fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div class="chat-box">
-            <div id="chat-history" class="chat-history">
-                <div class="chat-message welcome-message">Welcome</div>
-                <div class="chat-message welcome-message">Hello! How can I assist you today?</div>
-            </div>
-            <form id="chat-form">
-                <input type="text" id="message" name="message" placeholder="Type a message..." autocomplete="off" required>
-                <button type="submit">Send</button>
-            </form>
-        </div>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function scrollToBottom() {
-            $('#chat-history').scrollTop($('#chat-history')[0].scrollHeight);
-        }
-
-        $(document).ready(function() {
-            $('#chat-form').on('submit', function(e) {
-                e.preventDefault();
-
-                let message = $('#message').val();
-                let topics = $('input[name="topic"]:checked').map(function() {
-                    return this.value;
-                }).get();
-
-                // Append the user's message immediately
-                $('#chat-history').append('<div class="chat-message user-message">' + message + '</div>');
-                $('#message').val('');
-
-                // Scroll to the bottom of the chat history
-                scrollToBottom();
-
-                $.ajax({
-                    url: '/send_message',
-                    method: 'POST',
-                    data: {
-                        message: message,
-                        'topic[]': topics
-                    },
-                    success: function(response) {
-                        $('#chat-history').append('<div class="chat-message ai-message">' + response.reply + '</div>');
-
-                        // Scroll to the bottom of the chat history
-                        scrollToBottom();
-                    }
-                });
-            });
-        });
-    </script>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
+
+</html>
 
 </html>
